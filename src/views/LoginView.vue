@@ -38,7 +38,6 @@ const pushDashboard = (e: Event) => {
 #LoginContent {
   width: 100%;
   height: 100%;
-  animation: typing 0.6s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 
 #cardForm {
@@ -51,18 +50,5 @@ const pushDashboard = (e: Event) => {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   height: 100%;
-}
-
-.input-form {
-  animation: typing 0.4s steps(40, end), blink-caret 0.75s step-end infinite;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
 }
 </style>
