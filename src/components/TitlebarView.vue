@@ -22,7 +22,7 @@ onMounted(() => {
   <div class="titlebar">
     <div data-tauri-drag-region>
       <div class="mt-1 ms-3">
-        <span class="fw-bold solarized-text"> ContaFlow - Alpha 0.0.1 </span>
+        <span class="fw-bold solarized-text"> JurisREM - Alpha 0.0.1 </span>
       </div>
     </div>
     <div class="controls">
