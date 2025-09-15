@@ -1,0 +1,96 @@
+<script setup lang="ts">
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { onMounted } from "vue";
+
+// when using `"withGlobalTauri": true`, you may use
+// const { getCurrentWindow } = window.__TAURI__.window;
+
+const appWindow = getCurrentWindow();
+
+onMounted(() => {
+  document
+    .getElementById("titlebar-minimize")
+    ?.addEventListener("click", () => appWindow.minimize());
+  document
+    .getElementById("titlebar-maximize")
+    ?.addEventListener("click", () => appWindow.toggleMaximize());
+  document.getElementById("titlebar-close")?.addEventListener("click", () => appWindow.close());
+});
+</script>
+
+<template>
+  <div class="titlebar">
+    <div data-tauri-drag-region>
+      <div class="mt-1 ms-3">
+        <span class="fw-bold solarized-text"> ContaFlow - Alpha 0.0.1 </span>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="titlebar-minimize" title="minimize">
+        <!-- https://api.iconify.design/mdi:window-minimize.svg -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M19 13H5v-2h14z" />
+        </svg>
+      </button>
+      <button id="titlebar-maximize" title="maximize">
+        <!-- https://api.iconify.design/mdi:window-maximize.svg -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M4 4h16v16H4zm2 4v10h12V8z" />
+        </svg>
+      </button>
+      <button id="titlebar-close" title="close">
+        <!-- https://api.iconify.design/mdi:close.svg -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M13.46 12L19 17.54V19h-1.46L12 13.46L6.46 19H5v-1.46L10.54 12L5 6.46V5h1.46L12 10.54L17.54 5H19v1.46z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="css">
+.titlebar {
+  height: 35px;
+  user-select: none;
+  display: grid;
+  grid-template-columns: auto max-content;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+
+  @media (prefers-color-scheme: light) {
+    background: var(--base3);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: var(--base03);
+  }
+}
+.titlebar > .controls {
+  display: flex;
+}
+.titlebar button {
+  color: var(--base1);
+  appearance: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  background-color: transparent;
+}
+.titlebar button:hover {
+  background: var(--base0);
+}
+
+*[data-tauri-drag-region] {
+  app-region: drag;
+}
+</style>

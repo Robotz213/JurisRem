@@ -1,0 +1,26 @@
+name: 🚀 Checagem de Pull Request
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - "!releases/**"
+      - "!main"
+      - "dev"
+  pull_request:
+    branches:
+      - "!releases/**"
+      - "!main"
+      - "dev"
+
+jobs:
+  pre-commit:
+    # Define permissões mínimas para o GITHUB_TOKEN conforme recomendado
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - uses: pre-commit/action@v3.0.1
