@@ -7,3 +7,9 @@ declare module "*.vue" {
 }
 
 declare module "*.js" {}
+
+declare module "~icons/*" {
+  import { DefineComponent } from "vue";
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}

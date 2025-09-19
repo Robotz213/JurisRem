@@ -2,58 +2,62 @@
 import mainFramePropsStore from "@/app/stores/mainFrameStore";
 import SideBar from "@/assets/styled/sidebar";
 import { storeToRefs } from "pinia";
-const { widthSidebar, translateX } = storeToRefs(mainFramePropsStore());
+import MdiSpeedometer from "~icons/mdi/speedometer?width=48px&height=48px";
+const { widthSidebar, translateX, toggleSidebar } = storeToRefs(mainFramePropsStore());
+// Computed para verificar se a sidebar está colapsada
+import { computed } from "vue";
+const isCollapsed = computed(() => widthSidebar.value != "250px"); // ajuste conforme necessário
 </script>
 
 <template>
   <SideBar :width="widthSidebar" :translatepx="translateX">
-    <div class="sidebar-content h-100 d-flex flex-column">
+    <div class="sidebar-content h-100 d-flex flex-column pt-5">
       <!-- Logo/Brand -->
-      <div class="sidebar-header p-3 border-bottom">
+      <div class="sidebar-header p-3 border-bottom" @click="toggleSidebar = !toggleSidebar">
         <h6 class="text-white mb-0">JurisREM</h6>
       </div>
-      
+
       <!-- Navigation Menu -->
       <nav class="sidebar-nav flex-grow-1 p-2">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <router-link 
-              :to="{ name: 'dashboard' }" 
+            <router-link
+              :to="{ name: 'dashboard' }"
               class="nav-link text-white d-flex align-items-center"
               active-class="active"
             >
-              <i class="fas fa-home me-2"></i>
-              <span class="sidebar-text">Dashboard</span>
+              <MdiSpeedometer />
+              <span v-if="!isCollapsed" class="sidebar-text">Dashboard</span>
             </router-link>
           </li>
-          
+
           <li class="nav-item">
-            <router-link 
-              :to="{ name: 'processos-lista' }" 
+            <router-link
+              :to="{ name: 'processos-lista' }"
               class="nav-link text-white d-flex align-items-center"
               active-class="active"
             >
               <i class="fas fa-gavel me-2"></i>
-              <span class="sidebar-text">Processos</span>
+              <span v-if="!isCollapsed" class="sidebar-text">Processos</span>
             </router-link>
           </li>
-          
+
           <li class="nav-item">
-            <router-link 
-              :to="{ name: 'processo-criar' }" 
+            <router-link
+              :to="{ name: 'processo-criar' }"
               class="nav-link text-white d-flex align-items-center"
               active-class="active"
             >
               <i class="fas fa-plus me-2"></i>
-              <span class="sidebar-text">Novo Processo</span>
+              <span v-if="!isCollapsed" class="sidebar-text">Novo Processo</span>
             </router-link>
           </li>
         </ul>
       </nav>
-      
+
       <!-- Footer -->
       <div class="sidebar-footer p-3 border-top">
-        <small class="text-white-50 sidebar-text">v0.1.0</small>
+        <small class="text-white-50 sidebar-text" v-if="!isCollapsed">v0.1.0</small>
       </div>
     </div>
   </SideBar>
@@ -84,10 +88,12 @@ const { widthSidebar, translateX } = storeToRefs(mainFramePropsStore());
   transition: opacity 0.2s ease;
 }
 
-/* Hide text when sidebar is collapsed */
-@media (max-width: 768px) {
-  .sidebar-text {
-    display: none;
-  }
+/* Esconde texto quando sidebar está colapsada (width <= 80px) */
+.sidebar-text {
+  display: inline;
+}
+
+.collapsed .sidebar-text {
+  display: none !important;
 }
 </style>
