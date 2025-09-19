@@ -9,8 +9,8 @@ const SideBar = styled("div", props)`
   top: 0;
   left: 0;
   transform: translateX(${(props) => props.translatepx});
-
-  transition: all 500ms;
+  overflow-x: hidden;
+  transition: all 350ms;
 `;
 
 export default SideBar;

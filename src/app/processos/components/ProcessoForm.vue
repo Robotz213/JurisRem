@@ -3,8 +3,8 @@
     <div class="card">
       <div class="card-header">
         <div class="d-flex align-items-center">
-          <router-link 
-            :to="{ name: 'processos-lista' }" 
+          <router-link
+            :to="{ name: 'processos-lista' }"
             class="btn btn-sm btn-outline-secondary me-3"
           >
             <i class="fas fa-arrow-left me-1"></i>
@@ -12,11 +12,11 @@
           </router-link>
           <h4 class="mb-0">
             <i class="fas fa-gavel me-2"></i>
-            {{ isEdicao ? 'Editar Processo' : 'Novo Processo' }}
+            {{ isEdicao ? "Editar Processo" : "Novo Processo" }}
           </h4>
         </div>
       </div>
-      
+
       <div class="card-body">
         <form @submit.prevent="salvarProcesso" novalidate>
           <div class="row">
@@ -101,9 +101,9 @@
                   </label>
                   <select
                     id="tipo"
-                    v-model="form.tipo"
+                    v-model="form.areaJuridica"
                     class="form-select"
-                    :class="{ 'is-invalid': erros.tipo }"
+                    :class="{ 'is-invalid': erros.areaJuridica }"
                     required
                   >
                     <option value="">Selecione o tipo</option>
@@ -115,8 +115,8 @@
                     <option value="familia">Família</option>
                     <option value="empresarial">Empresarial</option>
                   </select>
-                  <div v-if="erros.tipo" class="invalid-feedback">
-                    {{ erros.tipo }}
+                  <div v-if="erros.areaJuridica" class="invalid-feedback">
+                    {{ erros.areaJuridica }}
                   </div>
                 </div>
 
@@ -182,9 +182,7 @@
                     placeholder="R$ 0,00"
                     @input="formatarValorCausa"
                   />
-                  <div class="form-text">
-                    Valor monetário da causa em reais
-                  </div>
+                  <div class="form-text">Valor monetário da causa em reais</div>
                 </div>
               </div>
             </div>
@@ -192,22 +190,15 @@
 
           <!-- Botões de ação -->
           <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-            <router-link 
-              :to="{ name: 'processos-lista' }" 
-              class="btn btn-outline-secondary"
-            >
+            <router-link :to="{ name: 'processos-lista' }" class="btn btn-outline-secondary">
               <i class="fas fa-times me-1"></i>
               Cancelar
             </router-link>
-            
-            <button 
-              type="submit" 
-              class="btn btn-primary"
-              :disabled="salvando"
-            >
+
+            <button type="submit" class="btn btn-primary" :disabled="salvando">
               <span v-if="salvando" class="spinner-border spinner-border-sm me-2"></span>
               <i v-else class="fas fa-save me-1"></i>
-              {{ isEdicao ? 'Atualizar' : 'Criar' }} Processo
+              {{ isEdicao ? "Atualizar" : "Criar" }} Processo
             </button>
           </div>
         </form>
@@ -218,33 +209,25 @@
     <div v-if="erro" class="alert alert-danger mt-3">
       <i class="fas fa-exclamation-triangle me-2"></i>
       {{ erro }}
-      <button 
-        @click="limparErro" 
-        type="button" 
-        class="btn-close float-end"
-      ></button>
+      <button @click="limparErro" type="button" class="btn-close float-end"></button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useProcessoStore } from '../../stores/processoStore';
-import { StatusProcesso, TipoProcesso } from '../../../domain/entities/Processo';
-import type { Processo } from '../../../domain/entities/Processo';
+import { storeToRefs } from "pinia";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import type { Processo } from "../../../domain/entities/Processo";
+import { StatusProcesso, TipoProcesso } from "../../../domain/entities/Processo";
+import { useProcessoStore } from "../../stores/processoStore";
 
 const route = useRoute();
 const router = useRouter();
 const processoStore = useProcessoStore();
 
 // Estado reativo do store
-const {
-  processoAtual,
-  salvando,
-  erro
-} = storeToRefs(processoStore);
+const { processoAtual, salvando, erro } = storeToRefs(processoStore);
 
 // Actions do store
 const {
@@ -252,24 +235,24 @@ const {
   criarProcesso,
   atualizarProcesso,
   limparErro,
-  limparProcessoAtual
+  limparProcessoAtual,
 } = processoStore;
 
 // Estado local
 const form = ref({
-  numeroProcesso: '',
-  titulo: '',
-  descricao: '',
-  tipo: '' as TipoProcesso | '',
+  numeroProcesso: "",
+  titulo: "",
+  descricao: "",
+  areaJuridica: "" as TipoProcesso | "",
   status: StatusProcesso.RASCUNHO,
-  cliente: '',
-  parteContraria: '',
-  tribunal: '',
-  valorCausa: undefined as number | undefined
+  cliente: "",
+  parteContraria: "",
+  tribunal: "",
+  valorCausa: undefined as number | undefined,
 });
 
 const erros = ref<Record<string, string>>({});
-const valorCausaFormatted = ref('');
+const valorCausaFormatted = ref("");
 
 // Computed
 const isEdicao = computed(() => !!route.params.id);
@@ -283,33 +266,36 @@ function validarFormulario(): boolean {
 
   // Campos obrigatórios
   if (!form.value.numeroProcesso.trim()) {
-    erros.value.numeroProcesso = 'Número do processo é obrigatório';
+    erros.value.numeroProcesso = "Número do processo é obrigatório";
     isValido = false;
   }
 
   if (!form.value.titulo.trim()) {
-    erros.value.titulo = 'Título é obrigatório';
+    erros.value.titulo = "Título é obrigatório";
     isValido = false;
   }
 
   if (!form.value.descricao.trim()) {
-    erros.value.descricao = 'Descrição é obrigatória';
+    erros.value.descricao = "Descrição é obrigatória";
     isValido = false;
   }
 
   if (!form.value.cliente.trim()) {
-    erros.value.cliente = 'Cliente é obrigatório';
+    erros.value.cliente = "Cliente é obrigatório";
     isValido = false;
   }
 
-  if (!form.value.tipo) {
-    erros.value.tipo = 'Tipo de processo é obrigatório';
+  if (!form.value.areaJuridica) {
+    erros.value.areaJuridica = "Tipo de processo é obrigatório";
     isValido = false;
   }
 
   // Validações específicas
-  if (form.value.numeroProcesso && !/^\d{7}-\d{2}\.\d{4}\.\d{1}\.\d{2}\.\d{4}$/.test(form.value.numeroProcesso)) {
-    erros.value.numeroProcesso = 'Formato inválido. Use: 0001234-56.2023.8.02.0001';
+  if (
+    form.value.numeroProcesso &&
+    !/^\d{7}-\d{2}\.\d{4}\.\d{1}\.\d{2}\.\d{4}$/.test(form.value.numeroProcesso)
+  ) {
+    erros.value.numeroProcesso = "Formato inválido. Use: 0001234-56.2023.8.02.0001";
     isValido = false;
   }
 
@@ -324,41 +310,41 @@ async function salvarProcesso() {
   try {
     const dadosProcesso = {
       ...form.value,
-      tipo: form.value.tipo as TipoProcesso
+      areaJuridica: form.value.areaJuridica as TipoProcesso,
     };
 
     if (isEdicao.value) {
       await atualizarProcesso(processoId.value, dadosProcesso);
-      router.push({ name: 'processo-detalhes', params: { id: processoId.value } });
+      router.push({ name: "processo-detalhes", params: { id: processoId.value } });
     } else {
       const novoProcesso = await criarProcesso(dadosProcesso);
-      router.push({ name: 'processo-detalhes', params: { id: novoProcesso.id } });
+      router.push({ name: "processo-detalhes", params: { id: novoProcesso.id } });
     }
   } catch (error) {
     // Erro já tratado no store
-    console.error('Erro ao salvar processo:', error);
+    console.error("Erro ao salvar processo:", error);
   }
 }
 
 function formatarValorCausa(event: Event) {
   const target = event.target as HTMLInputElement;
   let valor = target.value;
-  
+
   // Remove caracteres não numéricos
-  valor = valor.replace(/\D/g, '');
-  
+  valor = valor.replace(/\D/g, "");
+
   // Converte para número em centavos
   const numeroValor = parseInt(valor) || 0;
   form.value.valorCausa = numeroValor;
-  
+
   // Formatar para exibição
   if (numeroValor === 0) {
-    valorCausaFormatted.value = '';
+    valorCausaFormatted.value = "";
   } else {
     const valorReais = numeroValor / 100;
-    valorCausaFormatted.value = new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
+    valorCausaFormatted.value = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
     }).format(valorReais);
   }
 }
@@ -368,20 +354,20 @@ function carregarDadosFormulario(processo: Processo) {
     numeroProcesso: processo.numeroProcesso,
     titulo: processo.titulo,
     descricao: processo.descricao,
-    tipo: processo.tipo,
+    areaJuridica: processo.areaJuridica,
     status: processo.status,
     cliente: processo.cliente,
-    parteContraria: processo.parteContraria || '',
-    tribunal: processo.tribunal || '',
-    valorCausa: processo.valorCausa
+    parteContraria: processo.parteContraria || "",
+    tribunal: processo.tribunal || "",
+    valorCausa: processo.valorCausa,
   };
 
   // Formatar valor da causa para exibição
   if (processo.valorCausa) {
     const valorReais = processo.valorCausa / 100;
-    valorCausaFormatted.value = new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
+    valorCausaFormatted.value = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
     }).format(valorReais);
   }
 }

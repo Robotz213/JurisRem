@@ -1,9 +1,6 @@
-import { httpClient } from './httpClient';
-import { endpoints } from '../config/api';
-import type {
-  DocumentoDTO,
-  UploadDocumentoDTO
-} from './dtos';
+import { endpoints } from "../config/api";
+import type { DocumentoDTO, UploadDocumentoDTO } from "./dtos";
+import { httpClient } from "./httpClient";
 
 /**
  * Serviço para operações relacionadas a documentos na API
@@ -34,12 +31,12 @@ export class DocumentoApiService {
    */
   async uploadDocumento(dadosUpload: UploadDocumentoDTO): Promise<DocumentoDTO> {
     const formData = new FormData();
-    formData.append('arquivo', dadosUpload.arquivo);
-    formData.append('processoId', dadosUpload.processoId);
-    formData.append('tipo', dadosUpload.tipo);
-    
+    formData.append("arquivo", dadosUpload.arquivo);
+    formData.append("processoId", dadosUpload.processoId);
+    formData.append("areaJuridica", dadosUpload.areaJuridica);
+
     if (dadosUpload.descricao) {
-      formData.append('descricao', dadosUpload.descricao);
+      formData.append("descricao", dadosUpload.descricao);
     }
 
     return httpClient.uploadFile<DocumentoDTO>(endpoints.documentos.upload, formData);
@@ -70,25 +67,25 @@ export class DocumentoApiService {
   async baixarDocumento(id: string, nomeArquivo: string): Promise<void> {
     try {
       const blob = await this.downloadDocumento(id);
-      
+
       // Criar URL temporária para o blob
       const url = window.URL.createObjectURL(blob);
-      
+
       // Criar elemento de link temporário para download
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = nomeArquivo;
       document.body.appendChild(link);
-      
+
       // Disparar o download
       link.click();
-      
+
       // Limpar recursos
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Erro ao baixar documento:', error);
-      throw new Error('Não foi possível baixar o documento');
+      console.error("Erro ao baixar documento:", error);
+      throw new Error("Não foi possível baixar o documento");
     }
   }
 }

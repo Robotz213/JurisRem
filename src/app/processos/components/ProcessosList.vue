@@ -8,49 +8,43 @@
           Processos Jurídicos
         </h4>
         <div class="d-flex gap-2">
-          <button 
-            class="btn btn-outline-secondary"
-            @click="toggleFiltros"
-          >
+          <button class="btn btn-outline-secondary" @click="toggleFiltros">
             <i class="fas fa-filter me-1"></i>
             Filtros
           </button>
-          <router-link 
-            :to="{ name: 'processo-criar' }" 
-            class="btn btn-primary"
-          >
+          <router-link :to="{ name: 'processo-criar' }" class="btn btn-primary">
             <i class="fas fa-plus me-1"></i>
             Novo Processo
           </router-link>
         </div>
       </div>
-      
+
       <!-- Painel de filtros -->
       <div v-if="mostrarFiltros" class="card-body border-top">
         <form @submit.prevent="aplicarFiltros" class="row g-3">
           <div class="col-md-3">
             <label class="form-label">Título</label>
-            <input 
-              v-model="filtrosForm.titulo" 
-              type="text" 
+            <input
+              v-model="filtrosForm.titulo"
+              type="text"
               class="form-control"
               placeholder="Buscar por título..."
             />
           </div>
           <div class="col-md-3">
             <label class="form-label">Número do Processo</label>
-            <input 
-              v-model="filtrosForm.numeroProcesso" 
-              type="text" 
+            <input
+              v-model="filtrosForm.numeroProcesso"
+              type="text"
               class="form-control"
               placeholder="Ex: 0001234-56.2023.8.02.0001"
             />
           </div>
           <div class="col-md-3">
             <label class="form-label">Cliente</label>
-            <input 
-              v-model="filtrosForm.cliente" 
-              type="text" 
+            <input
+              v-model="filtrosForm.cliente"
+              type="text"
               class="form-control"
               placeholder="Nome do cliente..."
             />
@@ -96,11 +90,15 @@
             <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
             <h5 class="text-muted">Nenhum processo encontrado</h5>
             <p class="text-muted">
-              {{ Object.keys(filtros).length > 0 ? 'Tente ajustar os filtros de busca.' : 'Comece criando seu primeiro processo.' }}
+              {{
+                Object.keys(filtros).length > 0
+                  ? "Tente ajustar os filtros de busca."
+                  : "Comece criando seu primeiro processo."
+              }}
             </p>
-            <router-link 
+            <router-link
               v-if="Object.keys(filtros).length === 0"
-              :to="{ name: 'processo-criar' }" 
+              :to="{ name: 'processo-criar' }"
               class="btn btn-primary"
             >
               <i class="fas fa-plus me-1"></i>
@@ -112,51 +110,49 @@
 
       <!-- Cards dos processos -->
       <div v-else>
-        <div 
-          v-for="processo in processos" 
-          :key="processo.id" 
-          class="col-lg-6 col-xl-4 mb-4"
-        >
+        <div v-for="processo in processos" :key="processo.id" class="col-lg-6 col-xl-4 mb-4">
           <div class="card h-100 shadow-sm processo-card">
             <div class="card-header d-flex justify-content-between align-items-start">
               <div class="flex-grow-1">
                 <h6 class="mb-1 text-truncate">{{ processo.titulo }}</h6>
                 <small class="text-muted">{{ processo.numeroProcesso }}</small>
               </div>
-              <span 
-                class="badge ms-2"
-                :class="`bg-${formatters.statusParaCor(processo.status)}`"
-              >
+              <span class="badge ms-2" :class="`bg-${formatters.statusParaCor(processo.status)}`">
                 {{ processo.status }}
               </span>
             </div>
-            
+
             <div class="card-body">
               <p class="card-text text-muted small mb-2">
-                {{ processo.descricao.length > 100 ? processo.descricao.substring(0, 100) + '...' : processo.descricao }}
+                {{
+                  processo.descricao.length > 100
+                    ? processo.descricao.substring(0, 100) + "..."
+                    : processo.descricao
+                }}
               </p>
-              
+
               <div class="mb-2">
                 <small class="text-muted">
                   <i class="fas fa-user me-1"></i>
                   <strong>Cliente:</strong> {{ processo.cliente }}
                 </small>
               </div>
-              
+
               <div class="mb-2">
                 <small class="text-muted">
                   <i class="fas fa-tag me-1"></i>
-                  <strong>Tipo:</strong> {{ formatters.tipoProcessoLabel(processo.tipo) }}
+                  <strong>Tipo:</strong> {{ formatters.tipoProcessoLabel(processo.areaJuridica) }}
                 </small>
               </div>
-              
+
               <div class="mb-2">
                 <small class="text-muted">
                   <i class="fas fa-calendar me-1"></i>
-                  <strong>Atualizado:</strong> {{ formatters.formatarData(processo.dataAtualizacao) }}
+                  <strong>Atualizado:</strong>
+                  {{ formatters.formatarData(processo.dataAtualizacao) }}
                 </small>
               </div>
-              
+
               <div v-if="processo.valorCausa" class="mb-2">
                 <small class="text-muted">
                   <i class="fas fa-dollar-sign me-1"></i>
@@ -164,20 +160,20 @@
                 </small>
               </div>
             </div>
-            
+
             <div class="card-footer bg-transparent">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex gap-1">
-                  <span 
-                    v-if="processo.movimentacoes?.length" 
+                  <span
+                    v-if="processo.movimentacoes?.length"
                     class="badge bg-info"
                     :title="`${processo.movimentacoes.length} movimentações`"
                   >
                     <i class="fas fa-history me-1"></i>
                     {{ processo.movimentacoes.length }}
                   </span>
-                  <span 
-                    v-if="processo.documentos?.length" 
+                  <span
+                    v-if="processo.documentos?.length"
                     class="badge bg-secondary"
                     :title="`${processo.documentos.length} documentos`"
                   >
@@ -185,9 +181,9 @@
                     {{ processo.documentos.length }}
                   </span>
                 </div>
-                
-                <router-link 
-                  :to="{ name: 'processo-detalhes', params: { id: processo.id } }" 
+
+                <router-link
+                  :to="{ name: 'processo-detalhes', params: { id: processo.id } }"
                   class="btn btn-sm btn-outline-primary"
                 >
                   <i class="fas fa-eye me-1"></i>
@@ -202,8 +198,8 @@
 
     <!-- Paginação -->
     <div v-if="temMaisItens && !carregandoLista" class="text-center mt-4">
-      <button 
-        @click="carregarMaisProcessos" 
+      <button
+        @click="carregarMaisProcessos"
         class="btn btn-outline-primary"
         :disabled="carregandoLista"
       >
@@ -216,33 +212,23 @@
     <div v-if="erro" class="alert alert-danger mt-3">
       <i class="fas fa-exclamation-triangle me-2"></i>
       {{ erro }}
-      <button 
-        @click="limparErro" 
-        type="button" 
-        class="btn-close float-end"
-      ></button>
+      <button @click="limparErro" type="button" class="btn-close float-end"></button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useProcessoStore } from '../../stores/processoStore';
-import { formatters } from '../../../application/mappers/processoMappers';
-import type { FiltrosProcessoDTO } from '../../../infrastructure/api/dtos';
+import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+import { formatters } from "../../../application/mappers/processoMappers";
+import type { FiltrosProcessoDTO } from "../../../infrastructure/api/dtos";
+import { useProcessoStore } from "../../stores/processoStore";
 
 const processoStore = useProcessoStore();
 
 // Estado reativo do store
-const {
-  processos,
-  carregandoLista,
-  erro,
-  filtros,
-  temProcessos,
-  temMaisItens
-} = storeToRefs(processoStore);
+const { processos, carregandoLista, erro, filtros, temProcessos, temMaisItens } =
+  storeToRefs(processoStore);
 
 // Estado local do componente
 const mostrarFiltros = ref(false);
@@ -254,7 +240,7 @@ const {
   carregarMaisProcessos,
   limparErro,
   aplicarFiltros: aplicarFiltrosStore,
-  limparFiltros: limparFiltrosStore
+  limparFiltros: limparFiltrosStore,
 } = processoStore;
 
 // Métodos

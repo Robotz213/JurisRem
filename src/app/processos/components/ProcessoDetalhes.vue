@@ -25,15 +25,15 @@
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <div class="d-flex align-items-center mb-2">
-                <router-link 
-                  :to="{ name: 'processos-lista' }" 
+                <router-link
+                  :to="{ name: 'processos-lista' }"
                   class="btn btn-sm btn-outline-secondary me-3"
                 >
                   <i class="fas fa-arrow-left me-1"></i>
                   Voltar
                 </router-link>
                 <h4 class="mb-0">{{ processoAtual.titulo }}</h4>
-                <span 
+                <span
                   class="badge ms-3"
                   :class="`bg-${formatters.statusParaCor(processoAtual.status)}`"
                 >
@@ -45,9 +45,9 @@
               </p>
             </div>
             <div class="dropdown">
-              <button 
-                class="btn btn-outline-secondary dropdown-toggle" 
-                type="button" 
+              <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
                 data-bs-toggle="dropdown"
               >
                 <i class="fas fa-cog me-1"></i>
@@ -66,10 +66,10 @@
                     Upload Documento
                   </button>
                 </li>
-                <li><hr class="dropdown-divider"></li>
+                <li><hr class="dropdown-divider" /></li>
                 <li>
-                  <router-link 
-                    :to="{ name: 'processo-editar', params: { id: processoAtual.id } }" 
+                  <router-link
+                    :to="{ name: 'processo-editar', params: { id: processoAtual.id } }"
                     class="dropdown-item"
                   >
                     <i class="fas fa-edit me-2"></i>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label class="form-label fw-bold">Tipo</label>
-                  <p class="mb-0">{{ formatters.tipoProcessoLabel(processoAtual.tipo) }}</p>
+                  <p class="mb-0">{{ formatters.tipoProcessoLabel(processoAtual.areaJuridica) }}</p>
                 </div>
                 <div v-if="processoAtual.parteContraria" class="col-md-6 mb-3">
                   <label class="form-label fw-bold">Parte Contrária</label>
@@ -137,10 +137,7 @@
                   {{ processoAtual.movimentacoes.length }}
                 </span>
               </h5>
-              <button 
-                class="btn btn-sm btn-outline-primary"
-                @click="abrirModalMovimentacao"
-              >
+              <button class="btn btn-sm btn-outline-primary" @click="abrirModalMovimentacao">
                 <i class="fas fa-plus me-1"></i>
                 Adicionar
               </button>
@@ -151,16 +148,18 @@
                 <p class="mb-0">Nenhuma movimentação registrada</p>
               </div>
               <div v-else class="timeline">
-                <div 
-                  v-for="movimentacao in movimentacoesOrdenadas" 
+                <div
+                  v-for="movimentacao in movimentacoesOrdenadas"
                   :key="movimentacao.id"
                   class="timeline-item"
                 >
                   <div class="timeline-marker"></div>
                   <div class="timeline-content">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                      <h6 class="mb-1">{{ movimentacao.tipo }}</h6>
-                      <small class="text-muted">{{ formatters.formatarData(movimentacao.data) }}</small>
+                      <h6 class="mb-1">{{ movimentacao.areaJuridica }}</h6>
+                      <small class="text-muted">{{
+                        formatters.formatarData(movimentacao.data)
+                      }}</small>
                     </div>
                     <p class="mb-1">{{ movimentacao.descricao }}</p>
                     <div v-if="movimentacao.observacoes" class="mt-2">
@@ -193,10 +192,7 @@
                   {{ processoAtual.documentos.length }}
                 </span>
               </h5>
-              <button 
-                class="btn btn-sm btn-outline-primary"
-                @click="abrirModalDocumento"
-              >
+              <button class="btn btn-sm btn-outline-primary" @click="abrirModalDocumento">
                 <i class="fas fa-upload me-1"></i>
                 Upload
               </button>
@@ -207,8 +203,8 @@
                 <p class="mb-0 small">Nenhum documento anexado</p>
               </div>
               <div v-else class="list-group list-group-flush">
-                <div 
-                  v-for="documento in processoAtual.documentos" 
+                <div
+                  v-for="documento in processoAtual.documentos"
                   :key="documento.id"
                   class="list-group-item px-0 py-2"
                 >
@@ -224,7 +220,7 @@
                         <small class="text-muted">{{ documento.descricao }}</small>
                       </div>
                     </div>
-                    <button 
+                    <button
                       @click="baixarDocumento(documento)"
                       class="btn btn-sm btn-outline-secondary ms-2"
                       :title="`Baixar ${documento.nomeArquivo}`"
@@ -249,7 +245,9 @@
               <div class="row text-center">
                 <div class="col-6">
                   <div class="border-end">
-                    <h4 class="text-primary mb-1">{{ processoAtual.movimentacoes?.length || 0 }}</h4>
+                    <h4 class="text-primary mb-1">
+                      {{ processoAtual.movimentacoes?.length || 0 }}
+                    </h4>
                     <small class="text-muted">Movimentações</small>
                   </div>
                 </div>
@@ -258,11 +256,13 @@
                   <small class="text-muted">Documentos</small>
                 </div>
               </div>
-              <hr>
+              <hr />
               <div class="row text-center">
                 <div class="col-12">
                   <small class="text-muted">Última atualização</small>
-                  <p class="mb-0 small">{{ formatters.formatarData(processoAtual.dataAtualizacao) }}</p>
+                  <p class="mb-0 small">
+                    {{ formatters.formatarData(processoAtual.dataAtualizacao) }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -275,75 +275,67 @@
     <div v-if="erro" class="alert alert-danger mt-3">
       <i class="fas fa-exclamation-triangle me-2"></i>
       {{ erro }}
-      <button 
-        @click="limparErro" 
-        type="button" 
-        class="btn-close float-end"
-      ></button>
+      <button @click="limparErro" type="button" class="btn-close float-end"></button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useProcessoStore } from '../../stores/processoStore';
-import { formatters } from '../../../application/mappers/processoMappers';
-import { processoService } from '../../../application/services/processoService';
-import type { Documento } from '../../../domain/entities/Processo';
+import { storeToRefs } from "pinia";
+import { computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import { formatters } from "../../../application/mappers/processoMappers";
+import { processoService } from "../../../application/services/processoService";
+import type { Documento } from "../../../domain/entities/Processo";
+import { useProcessoStore } from "../../stores/processoStore";
 
 const route = useRoute();
 const processoStore = useProcessoStore();
 
 // Estado reativo do store
-const {
-  processoAtual,
-  carregandoDetalhes,
-  erro
-} = storeToRefs(processoStore);
+const { processoAtual, carregandoDetalhes, erro } = storeToRefs(processoStore);
 
 // Actions do store
-const {
-  carregarProcessoDetalhes,
-  limparErro,
-  limparProcessoAtual
-} = processoStore;
+const { carregarProcessoDetalhes, limparErro, limparProcessoAtual } = processoStore;
 
 // Computed
 const movimentacoesOrdenadas = computed(() => {
   if (!processoAtual.value?.movimentacoes) return [];
-  return [...processoAtual.value.movimentacoes].sort((a, b) => 
-    new Date(b.data).getTime() - new Date(a.data).getTime()
+  return [...processoAtual.value.movimentacoes].sort(
+    (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
   );
 });
 
 // Métodos
 function abrirModalMovimentacao() {
   // TODO: Implementar modal de movimentação
-  console.log('Abrir modal de movimentação');
+  console.log("Abrir modal de movimentação");
 }
 
 function abrirModalDocumento() {
   // TODO: Implementar modal de documento
-  console.log('Abrir modal de documento');
+  console.log("Abrir modal de documento");
 }
 
 async function baixarDocumento(documento: Documento) {
   try {
     await processoService.baixarDocumento(documento);
   } catch (error) {
-    console.error('Erro ao baixar documento:', error);
+    console.error("Erro ao baixar documento:", error);
     // TODO: Mostrar notificação de erro
   }
 }
 
 // Watchers
-watch(() => route.params.id, (novoId) => {
-  if (novoId && typeof novoId === 'string') {
-    carregarProcessoDetalhes(novoId);
-  }
-}, { immediate: true });
+watch(
+  () => route.params.id,
+  (novoId) => {
+    if (novoId && typeof novoId === "string") {
+      carregarProcessoDetalhes(novoId);
+    }
+  },
+  { immediate: true }
+);
 
 // Lifecycle
 onMounted(() => {
@@ -368,7 +360,7 @@ onMounted(() => {
 }
 
 .timeline::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0.75rem;
   top: 0;

@@ -12,7 +12,7 @@ export interface ProcessoDTO {
   titulo: string;
   descricao: string;
   status: string;
-  tipo: string;
+  areaJuridica: string;
   dataCriacao: string; // ISO date string
   dataAtualizacao: string; // ISO date string
   cliente: string;
@@ -30,7 +30,7 @@ export interface CriarProcessoDTO {
   numeroProcesso: string;
   titulo: string;
   descricao: string;
-  tipo: string;
+  areaJuridica: string;
   cliente: string;
   parteContraria?: string;
   valorCausa?: number;
@@ -55,7 +55,7 @@ export interface AtualizarProcessoDTO {
 export interface MovimentacaoDTO {
   id: string;
   processoId: string;
-  tipo: string;
+  areaJuridica: string;
   descricao: string;
   data: string; // ISO date string
   usuario?: string;
@@ -67,7 +67,7 @@ export interface MovimentacaoDTO {
  */
 export interface CriarMovimentacaoDTO {
   processoId: string;
-  tipo: string;
+  areaJuridica: string;
   descricao: string;
   observacoes?: string;
 }
@@ -79,7 +79,7 @@ export interface DocumentoDTO {
   id: string;
   processoId: string;
   nomeArquivo: string;
-  tipo: string;
+  areaJuridica: string;
   tamanho: number;
   mimeType: string;
   url: string;
@@ -92,7 +92,7 @@ export interface DocumentoDTO {
  */
 export interface UploadDocumentoDTO {
   processoId: string;
-  tipo: string;
+  areaJuridica: string;
   descricao?: string;
   arquivo: File;
 }
@@ -100,12 +100,14 @@ export interface UploadDocumentoDTO {
 /**
  * DTO para resposta paginada da API
  */
-export interface RespostaPaginada<T> {
-  data: T[];
-  total: number;
-  pagina: number;
-  itensPorPagina: number;
-  totalPaginas: number;
+export interface RespostaPaginada {
+  processos: ProcessoDTO[];
+  pagination: {
+    total: number;
+    pagina: number;
+    itensPorPagina: number;
+    totalPaginas: number;
+  };
 }
 
 /**
@@ -116,7 +118,7 @@ export interface FiltrosProcessoDTO {
   numeroProcesso?: string;
   cliente?: string;
   status?: string[];
-  tipo?: string[];
+  areaJuridica?: string[];
   dataInicio?: string;
   dataFim?: string;
   pagina?: number;

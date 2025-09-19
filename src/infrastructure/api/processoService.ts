@@ -1,12 +1,12 @@
-import { httpClient } from './httpClient';
-import { endpoints } from '../config/api';
+import { endpoints } from "../config/api";
 import type {
-  ProcessoDTO,
-  CriarProcessoDTO,
   AtualizarProcessoDTO,
+  CriarProcessoDTO,
   FiltrosProcessoDTO,
-  RespostaPaginada
-} from './dtos';
+  ProcessoDTO,
+  RespostaPaginada,
+} from "./dtos";
+import { httpClient } from "./httpClient";
 
 /**
  * Serviço para operações relacionadas a processos na API
@@ -17,8 +17,8 @@ export class ProcessoApiService {
    * @param filtros - Filtros para busca de processos
    * @returns Lista paginada de processos
    */
-  async listarProcessos(filtros?: FiltrosProcessoDTO): Promise<RespostaPaginada<ProcessoDTO>> {
-    return httpClient.get<RespostaPaginada<ProcessoDTO>>(endpoints.processos.list, filtros);
+  async listarProcessos(filtros?: FiltrosProcessoDTO): Promise<RespostaPaginada> {
+    return httpClient.get<RespostaPaginada>(endpoints.processos.list, filtros);
   }
 
   /**
@@ -45,7 +45,10 @@ export class ProcessoApiService {
    * @param dadosAtualizacao - Dados para atualização
    * @returns Processo atualizado
    */
-  async atualizarProcesso(id: string, dadosAtualizacao: AtualizarProcessoDTO): Promise<ProcessoDTO> {
+  async atualizarProcesso(
+    id: string,
+    dadosAtualizacao: AtualizarProcessoDTO
+  ): Promise<ProcessoDTO> {
     return httpClient.put<ProcessoDTO>(endpoints.processos.update(id), dadosAtualizacao);
   }
 

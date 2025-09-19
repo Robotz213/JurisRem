@@ -1,13 +1,30 @@
 <script setup lang="ts">
 import { StyledButton } from "@/assets/styled/buttons";
 import { InputForm } from "@/assets/styled/inputs";
+import { httpClient } from "@/infrastructure/api/httpClient";
+import { reactive } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const pushDashboard = (e: Event) => {
+const form = reactive({
+  login: "",
+  password: "",
+});
+
+const pushDashboard = async (e: Event) => {
   e.preventDefault();
-  router.push({ name: "dashboard" });
+
+  try {
+    const Form = new FormData();
+    Form.append("login", form.login);
+    Form.append("email", form.login);
+    Form.append("senha", form.password);
+
+    await httpClient.post("/auth/login", Form);
+
+    router.push({ name: "dashboard" });
+  } catch {}
 };
 </script>
 
@@ -20,10 +37,22 @@ const pushDashboard = (e: Event) => {
         style="height: 100%"
       >
         <BFormGroup id="fieldset-1" label-class="mb-4">
-          <InputForm size="md" class="input-form shadow mb-4" id="input-1" trim />
+          <InputForm
+            size="md"
+            v-model="form.login"
+            class="input-form shadow mb-4"
+            id="input-1"
+            trim
+          />
         </BFormGroup>
         <BFormGroup id="fieldset-1" label-class="mb-4">
-          <InputForm size="md" class="input-form shadow mb-4" id="input-1" trim />
+          <InputForm
+            size="md"
+            v-model="form.password"
+            class="input-form shadow mb-4"
+            id="input-1"
+            trim
+          />
         </BFormGroup>
         <StyledButton size="md" type="submit" class="shadow mt-3 mb-1 fw-bold" variant="success">
           Login
